@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Lab01_numerIcal_methods_math_eq/Lab01_numerIcal_methods_math_eq.iml" filepath="$PROJECT_DIR$/Lab01_numerIcal_methods_math_eq/Lab01_numerIcal_methods_math_eq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Lab02_numerIcal_methods_math_eq/Lab02_numerIcal_methods_math_eq.iml" filepath="$PROJECT_DIR$/Lab02_numerIcal_methods_math_eq/Lab02_numerIcal_methods_math_eq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Lab03_numerIcal_methods_math_eq/Lab03_numerIcal_methods_math_eq.iml" filepath="$PROJECT_DIR$/Lab03_numerIcal_methods_math_eq/Lab03_numerIcal_methods_math_eq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/numerical-methods-for-equations-math-physics-2022.iml" filepath="$PROJECT_DIR$/.idea/numerical-methods-for-equations-math-physics-2022.iml" />
+    </modules>
+  </component>
+</project>
