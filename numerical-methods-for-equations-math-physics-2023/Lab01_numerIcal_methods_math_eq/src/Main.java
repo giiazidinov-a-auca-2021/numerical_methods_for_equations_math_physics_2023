@@ -47,7 +47,7 @@ public class Main extends JFrame{
         add(mainPanel, BorderLayout.CENTER);
         // Parameter, methods selection
         Integer[] choicesNodes = { 8,12,16,24,32,48,64,96,128,192,256,384,512,768,1024,1536,2048,3072,4096,6144,8192};
-        String[] choicesProblem = { "Problem 1", "Problem 2", "Problem 4" };
+        String[] choicesProblem = { "Problem 1", "Problem 2", "Problem 6" };
         String[] choicesMethod = { "Central difference (gamma 1)", "Directional difference (gamma 2)" };
         Double[] choicesEpsilon = { 0.5,0.3,0.1,0.08,0.0625,0.015 };
         nodesChoice = new JComboBox<>(choicesNodes);                    // Node selection
@@ -105,17 +105,17 @@ public class Main extends JFrame{
     // Test problems
     private static double Function(double x) {
         return switch (problem) {
-            case 0, 1 -> x;
-            case 2 -> ((1-2*x)/(1+x)-E-Math.pow(Math.E,-1/E)/(1-Math.pow(Math.E,-1/E)))*(2/Math.pow(1+x,3));
+            case 0, 1 -> (1-x*x);
+     //       case 2 -> ((1-2*x)/(1+x)-E-Math.pow(Math.E,-1/E)/(1-Math.pow(Math.E,-1/E)))*(2/Math.pow(1+x,3));
             default -> 0;
         };
     }
     // Analytical solutions.
     private static double SolutionFunction(double x) {
         return switch (problem) {
-            case 0 -> phi0+((phi1-phi0+E-0.5)*(Math.pow(Math.E, -x/E)-1))/(Math.pow(Math.E, -1/E)-1)-E*x+0.5*x*x;
-            case 1 -> phi1+E-0.5+(Math.pow(Math.E,-x/E)-Math.pow(Math.E,-1/E))*(phi0-phi1-E-E*E+0.5)/(2-Math.pow(Math.E,-1/E))-E*x+0.5*x*x;
-            case 2 -> x/(1+x)+(Math.pow(Math.E,-1/E)-Math.pow(Math.E,-(2*x)/(E*(1+x))))/(2*(1-Math.pow(Math.E,-1/E)));
+            case 0 ->  ((phi0*Math.pow(Math.E, -1 / E)-phi1+2/3.0-2*E*E+E) / ( Math.pow(Math.E, -1 / E) -1)) + ((phi1-phi0-2/3.0+2*E*E+E) / (Math.pow(Math.E, -1 / E) - 1)) * (Math.pow(Math.E, -x / E)) - (x * x * x) / 3 + E*x*x - 2*E*E*x +x;
+            case 1 -> (phi0+E-2*E*E*E-2*((phi1-phi0-2/3.0-2*E+2*E*E+2*E*E*E)/(Math.pow(Math.E, -1/E)-2)))+((phi1-phi0-2/3.0-2*E+2*E*E+2*E*E*E)/(Math.pow(Math.E, -1/E)-2))*(Math.pow(Math.E, -x / E)) - (x * x * x) / 3 + E*x*x - 2*E*E*x +x;
+           // case 2 -> x/(1+x)+(Math.pow(Math.E,-1/E)-Math.pow(Math.E,-(2*x)/(E*(1+x))))/(2*(1-Math.pow(Math.E,-1/E)));
             default -> 0;
         };
     }
@@ -123,7 +123,7 @@ public class Main extends JFrame{
     private static double CoefficientA(double x) {
         return switch (problem) {
             case 0, 1 -> 1.0;
-            case 2 -> 2.0/((1+x)*(1+x));
+      //      case 2 -> 2.0/((1+x)*(1+x));
             default -> 0;
         };
     }
@@ -132,7 +132,7 @@ public class Main extends JFrame{
     private static double CoefficientB(double x) {
         return switch (problem) {
             case 0, 1 -> 0.0;
-            case 2 -> 4.0/((1+x)*(1+x)*(1+x));
+         //   case 2 -> 4.0/((1+x)*(1+x)*(1+x));
             default -> 0;
         };
     }
@@ -167,8 +167,8 @@ public class Main extends JFrame{
             case 0 -> {
                 zeta0 = zeta1 = 1.0;
                 eta0 = eta1 = 0.0;
-             //   phi0 = 0;
-             //   phi1 = 1;
+              //  phi0 = 0;
+              //  phi1 = 1;
             }
             case 1 -> {
                 zeta0 = zeta1 = 1.0;
@@ -177,13 +177,13 @@ public class Main extends JFrame{
              //   phi0 = 0;
              //   phi1 = 1;
             }
-            case 2 -> {
-                zeta0 = zeta1 = 2.0;
-                eta0 = 1.0;
-                eta1 = 4.0;
-                phi0 = -(1+E+1/(1-Math.pow(Math.E,-1/E)));
-                phi1 = 1+E+Math.pow(Math.E,-1/E)/(1-Math.pow(Math.E,-1/E));
-            }
+  //          case 2 -> {
+    //            zeta0 = zeta1 = 2.0;
+    //            eta0 = 1.0;
+     //           eta1 = 4.0;
+     //           phi0 = -(1+E+1/(1-Math.pow(Math.E,-1/E)));
+     //           phi1 = 1+E+Math.pow(Math.E,-1/E)/(1-Math.pow(Math.E,-1/E));
+     //       }
         }
         // Initialize arrays and variables
         h = 1.0/(N-1);
