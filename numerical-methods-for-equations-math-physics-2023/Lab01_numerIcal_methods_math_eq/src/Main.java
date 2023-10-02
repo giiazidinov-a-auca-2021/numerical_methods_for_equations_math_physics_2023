@@ -11,12 +11,12 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * @author Yiman Altynbek uulu
+  Abdurauf Giiazidinov
  *
  * course: Numerical methods for equations of mathematical physics.
  *
  *
- * 2022/10/07
+ * 02/10/2023
  * */
 
 public class Main extends JFrame{
