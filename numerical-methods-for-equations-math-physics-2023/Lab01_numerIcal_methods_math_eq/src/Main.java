@@ -46,19 +46,19 @@ public class Main extends JFrame{
         mainPanel.setBackground(Color.WHITE);
         add(mainPanel, BorderLayout.CENTER);
         // Parameter, methods selection
-        Integer[] choicesNodes = { 8,12,16,24,32,48,64,96,128,192,256,384,512,768,1024,1536,2048,3072,4096,6144,8192};
+        Integer[] choicesNodes = { 2,4, 5, 8, 9,11,12,16,24,32,48,64,96,128,192,256,384,512,768,1024,1536,2048,3072,4096,6144,8192};
         String[] choicesProblem = { "Problem 1", "Problem 2", "Problem 6" };
-        String[] choicesMethod = { "Central difference (gamma 1)", "Directional difference (gamma 2)" };
+        String[] choicesMethod = { "Central difference (gamma 1)", "Ilyan difference (gamma 6)" };
         Double[] choicesEpsilon = { 0.5,0.3,0.1,0.08,0.0625,0.015 };
         nodesChoice = new JComboBox<>(choicesNodes);                    // Node selection
         problemsChoice = new JComboBox<>(choicesProblem);               // Problems selection
         methodChoice = new JComboBox<>(choicesMethod);                  // Method selection
         epsilonChoice = new JComboBox<>(choicesEpsilon);                // Epsilon selection
-        epsilonInput = new JTextField("0.0135");
+        epsilonInput = new JTextField("0.00135");
         epsilonInput.setToolTipText("Epsilon");
         phi0Input = new JTextField("0");
         phi0Input.setToolTipText("Phi 0");
-        phi1Input = new JTextField("1");
+        phi1Input = new JTextField("0");
         phi1Input.setToolTipText("Phi 1");
         // Control panel
         JPanel controlPanel = new JPanel();
@@ -106,7 +106,9 @@ public class Main extends JFrame{
     private static double Function(double x) {
         return switch (problem) {
             case 0, 1 -> (1-x*x);
-     //       case 2 -> ((1-2*x)/(1+x)-E-Math.pow(Math.E,-1/E)/(1-Math.pow(Math.E,-1/E)))*(2/Math.pow(1+x,3));
+           case 2 -> (E*(1/(1+Math.pow(Math.E, -1/Math.sqrt(E)))) * ((1/E)*Math.pow(Math.E, -x/Math.sqrt(E)) + (1/E)*(Math.pow(Math.E, -(1-x)/Math.sqrt(E)))) - ((1+x)*(1+x))* (((Math.pow(Math.E, -x/Math.sqrt(E)) + Math.pow(Math.E, -(1-x)/Math.sqrt(E)))/(1+Math.pow(Math.E, -1/Math.sqrt(E)))) - Math.pow(Math.cos((Math.PI)*x), 2)));
+            // case 2 -> E*((Math.pow(Math.E, (2-x)/Math.sqrt(E))-Math.pow(Math.E, (1-x)/Math.sqrt(E))+Math.pow(Math.E, (x+1)/Math.sqrt(E))-Math.pow(Math.E, x/Math.sqrt(E)))/((Math.pow(Math.E, 2/Math.sqrt(E))*E -E)))+2*Math.PI*Math.PI*Math.cos(2*Math.PI*x) - Math.pow((1+x), 2)*(((Math.pow(Math.E, -x/E)+Math.pow(Math.E, (x-1)/Math.sqrt(E)))/(1+Math.pow(Math.E, -1/Math.sqrt(E))))-Math.pow(Math.cos(Math.PI*x), 2));
+            //      case 2 -> E*((1/(1+Math.pow(Math.E, -1/Math.sqrt(E))))*((1/E)*(Math.pow(Math.E, -x/Math.sqrt(E)))+(1/E)*(Math.pow(Math.E, -(1-x)/Math.sqrt(E)))))-(Math.pow((1+x), 2))*(((Math.pow(Math.E, -x/Math.sqrt(E))+ Math.pow(Math.E, -(1-x)/Math.sqrt(E)))/(1+Math.pow(Math.E, -1/Math.sqrt(E))))-Math.pow(Math.cos((Math.PI)*x), 2));
             default -> 0;
         };
     }
@@ -115,7 +117,7 @@ public class Main extends JFrame{
         return switch (problem) {
             case 0 ->  ((phi0*Math.pow(Math.E, -1 / E)-phi1+2/3.0-2*E*E+E) / ( Math.pow(Math.E, -1 / E) -1)) + ((phi1-phi0-2/3.0+2*E*E+E) / (Math.pow(Math.E, -1 / E) - 1)) * (Math.pow(Math.E, -x / E)) - (x * x * x) / 3 + E*x*x - 2*E*E*x +x;
             case 1 -> (phi0+E-2*E*E*E-2*((phi1-phi0-2/3.0-2*E+2*E*E+2*E*E*E)/(Math.pow(Math.E, -1/E)-2)))+((phi1-phi0-2/3.0-2*E+2*E*E+2*E*E*E)/(Math.pow(Math.E, -1/E)-2))*(Math.pow(Math.E, -x / E)) - (x * x * x) / 3 + E*x*x - 2*E*E*x +x;
-           // case 2 -> x/(1+x)+(Math.pow(Math.E,-1/E)-Math.pow(Math.E,-(2*x)/(E*(1+x))))/(2*(1-Math.pow(Math.E,-1/E)));
+            case 2 -> (Math.pow(Math.E, (-x)/Math.sqrt(E)) + Math.pow(Math.E, (-(1-x))/Math.sqrt(E)))/(1+Math.pow(Math.E, -1/Math.sqrt(E)))-Math.pow(Math.cos((Math.PI)*x), 2);
             default -> 0;
         };
     }
@@ -123,7 +125,7 @@ public class Main extends JFrame{
     private static double CoefficientA(double x) {
         return switch (problem) {
             case 0, 1 -> 1.0;
-      //      case 2 -> 2.0/((1+x)*(1+x));
+            case 2 -> 0.0;
             default -> 0;
         };
     }
@@ -132,7 +134,7 @@ public class Main extends JFrame{
     private static double CoefficientB(double x) {
         return switch (problem) {
             case 0, 1 -> 0.0;
-         //   case 2 -> 4.0/((1+x)*(1+x)*(1+x));
+            case 2 -> ((1+x)*(1+x));
             default -> 0;
         };
     }
@@ -177,13 +179,13 @@ public class Main extends JFrame{
              //   phi0 = 0;
              //   phi1 = 1;
             }
-  //          case 2 -> {
-    //            zeta0 = zeta1 = 2.0;
-    //            eta0 = 1.0;
-     //           eta1 = 4.0;
-     //           phi0 = -(1+E+1/(1-Math.pow(Math.E,-1/E)));
-     //           phi1 = 1+E+Math.pow(Math.E,-1/E)/(1-Math.pow(Math.E,-1/E));
-     //       }
+           case 2 -> {
+                zeta0 = zeta1 = 1.0;
+                eta0 = 0.0;
+                eta1 = 0.0;
+           //     phi0 = 0.0;
+           //     phi1 = 0.0;
+            }
         }
         // Initialize arrays and variables
         h = 1.0/(N-1);
@@ -212,7 +214,9 @@ public class Main extends JFrame{
                 break;
             case 1:
                 for (int i = 1; i <= N; i++)
-                    array_gamma[i] = 1.0+Math.abs(array_r[i]);
+                 //   array_gamma[i] = array_r[i] * ((Math.cosh(array_r[i]))/(Math.sinh(array_r[i])));
+                    array_gamma[i] = 1+(array_r[i]*array_r[i])/(1+Math.abs(array_r[i]));
+                //               array_gamma[i] = array_r[i] * (Math.cosh(array_r[i]) / Math.sinh(array_r[i]));
                 break;
         }
         // Compute A, B, C, F arrays

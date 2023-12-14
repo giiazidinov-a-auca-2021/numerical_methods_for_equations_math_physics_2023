@@ -18,11 +18,11 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * @author Yiman Altynbek uulu
+ * Abdurauf Giiazidinov
  * course: Numerical methods for equations of mathematical physics.
  *
  *
- * 2022/11/17
+ * 2023/12/12
  * */
 
 public class Main extends JFrame{
@@ -53,7 +53,7 @@ public class Main extends JFrame{
         Integer[] choicesTimeNodes= {5,9,17,33,65,129,257,513};
         Integer[] choicesTmax = {1,2,3,4,5,6,7};
         Integer[] choicesK = {1,2,3,4,5};
-        String[] choicesProblem = {"Problem No: 1 (l=2, m=1)"};
+        String[] choicesProblem = {"Problem No: 1 (l=2, m=2)"};
         String[] choicesIterationMethod = {"Jacob", "Seidel"};
         JLabel nodesLabel = new JLabel("Nodes");
         nodesChoice = new JComboBox<>(choicesNodes);                    // Node selection
@@ -186,7 +186,7 @@ public class Main extends JFrame{
     // Initialization
     private void Initialize() {
         l = 2;
-        m = 1;
+        m = 2;
         h = 1.0/(N-1);
        // sigma = 1.0/Math.pow(N-1, 3);
         sigmaInput.setText(Double.toString(sigma));

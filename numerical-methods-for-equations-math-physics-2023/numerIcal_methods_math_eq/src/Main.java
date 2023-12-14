@@ -14,18 +14,18 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * @author Yiman Altynbek uulu
+        Abdurauf Giiazidinov
  * course: Numerical methods for equations of mathematical physics.
  *
  *
- * 2022/11/17
+ * 2023/11/21
  * */
 
 public class Main extends JFrame{
     private static Main frame;
     private static ComputationThread thread;
     private static double[] x, alpha, beta, array_u, array_v, array_a, array_b, array_c, array_f, array_sol_origin, U;
-    private static double error=0.0, h, t=0, tau, curant, Tmax, theta, E, A, B, C, A0, B0, C0;
+    private static double error=0.0, h, t=0, tau, curant, Tmax, theta, E, A, B, C, A0, B0, C0, gam, v1, v2;
     private static boolean firstCycle = true, lastCycle = true;
     private static int N = 8, M, m = 1, T, k, problem = 0, scheme = 0;
     private static ArrayList<Double> xData1,yData1,xData2,yData2,xData3,yData3;
@@ -49,8 +49,8 @@ public class Main extends JFrame{
         Integer[] choicesTimeNodes= {5,9,17,33,65,129,257,513};
         Integer[] choicesTmax = {1,2,3,4,5,6,7};
         Integer[] choicesK = {1,2,3,4,5};
-        String[] choicesProblem = {"Тестовые задача 1."};
-        String[] choicesScheme = {"Явная схема (1)", "Схема Кранка-Николсона (2)", "Схема, сохраняющая монотонность (5)"};
+        String[] choicesProblem = {"Тестовые задача 3."};
+        String[] choicesScheme = {"Явная схема (1)", "Схема Кранка-Николсона (2)", "Схема наивысшего порядка сходимости (6)", "4 схема", "5 схема"};
         JLabel nodesLabel = new JLabel("Nodes");
         nodesChoice = new JComboBox<>(choicesNodes);                    // Node selection
         JLabel timeNodesLabel = new JLabel("Time nodes");
@@ -154,6 +154,7 @@ public class Main extends JFrame{
     //------------------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------NUMERICAL-METHODS------------------------------------------------------
     // Double sweep algorithm
+
     private static double[] ConstantDoubleSweep(int N, double A, double B, double C, double[] F) {
         alpha = new double[N+1];
         beta = new double[N+1];
@@ -177,19 +178,25 @@ public class Main extends JFrame{
     }
     // Analytical solution
     private static double U(double x, double t) {
-        return Math.sin(Math.PI*k*x)*Math.pow(Math.E,-(Math.PI*Math.PI*k*k)*E*t)+x*Psi1(t)+(1-x)*Psi0(t);
+        gam = Math.sqrt(k * Math.PI / (2 * E));
+        v1 = (Math.cos(gam * x) * Math.cosh(gam * (2.0 - x)) - Math.cosh(gam * x) * Math.cos(gam * (2.0 - x))) / (Math.cosh(2.0 * gam) - Math.cos(2.0 * gam));
+        v2 = (Math.sin(gam * x) * Math.sinh(gam * (2.0 - x)) - Math.sinh(gam * x) * Math.sin(gam * (2.0 - x))) / (Math.cosh(2.0 * gam) - Math.cos(2.0 * gam));
+        return v1 * Math.sin(Math.PI * k * t) - v2 * Math.cos(Math.PI * k * t);
     }
     // Phi(x)
     private static double Phi(double x, double t) {
-        return Math.sin(Math.PI*k*x)+x*Psi1(t)+(1-x)*Psi0(t);
+        gam = Math.sqrt(k * Math.PI / (2 * E));
+        v1 = (Math.cos(gam * x) * Math.cosh(gam * (2.0 - x)) - Math.cosh(gam * x) * Math.cos(gam * (2.0 - x))) / (Math.cosh(2.0 * gam) - Math.cos(2.0 * gam));
+        v2 = (Math.sin(gam * x) * Math.sinh(gam * (2.0 - x)) - Math.sinh(gam * x) * Math.sin(gam * (2.0 - x))) / (Math.cosh(2.0 * gam) - Math.cos(2.0 * gam));
+        return -v2;
     }
     // Psi0(t)
     private static double Psi0(double t) {
-        return 0;
+        return Math.sin(Math.PI * k * t);
     }
     // Psi1(t)
     private static double Psi1(double t) {
-        return 1;
+        return 0;
     }
     // Error
     public static double Error(double[] a1, double[] a2) {
@@ -210,9 +217,12 @@ public class Main extends JFrame{
         timeInput.setText(Double.toString(t));
         // Select a scheme
         switch (scheme) {
+
             case 0 -> theta = 0;
             case 1 -> theta = 1/2.0;
-            case 2 -> theta = Math.max(0.5, 1-3/(4.0*curant));
+            case 2 -> theta = (1/2.0) * (1-(1/(6.0*curant)));
+            case 3 -> theta = 1;
+            case 4 -> theta = Math.max(1/2.0, (1-(3)/(4*curant)));
         }
         // Constants
         A = theta*curant;
@@ -253,6 +263,7 @@ public class Main extends JFrame{
         }
         error = Math.max(Error(array_sol_origin, array_v), error);
     }
+
     //------------------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------MAIN----------------------------------------------------------------
     public static Color color(double val) {
